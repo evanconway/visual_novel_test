@@ -1,0 +1,3 @@
+January 21st, 2021
+
+Ok, unless I try and make some sort of small prototype, this plan of creating a visual novel will never go anywhere. Let's try to make a simple, bare bones visual novel game. Something similar to what I made with the castlevania rip off. 
