@@ -1,4 +1,4 @@
-text = ds_list_create(); // ds_list of text structs
+text = ds_list_create(); // ds_list of ds_list of text structs (2d list)
 text_original_string = undefined; // keep original string of set text
 effects_default = new JTT_Text(); // effect data is stored in an unused text struct
 
@@ -11,7 +11,7 @@ typing_time_pause = global.JTT_DEFAULT_TYPING_TIME_PAUSE;
 typing_time = 0;
 typing_increment = global.JTT_DEFAULT_TYPING_INCREMENT; // how far to increase cursor each increment
 
-/* If true, next_page() calls will also call set_typing_finished(). Since
+/* If true, next_page() calls will also call set_typing_page_finished(). Since
 most jtt calls create textboxes that are already typed, the default is 
 true. */
 type_on_nextpage = true; 
@@ -55,12 +55,19 @@ next_page. */
 row_i_start = undefined;
 row_i_end = undefined;
 
-/// @desc Set the text, effects included, of the textbox.
-/* If the textbox width and height are not defined, then the text generated
-will not line wrap, and width/height will be set to the width/height of the
-new text. */
 /// @func set_text(string)
+/// @desc Set the text, effects included, of the textbox.
 function set_text(text_string) {
+	
+	// reset typing and display values
+	cursor = 0;
+	cursor_row = 0;
+	row_i_start = undefined;
+	row_i_end = undefined;
+	
+	/* If the textbox width and height are not defined, then the text generated
+	will not line wrap, and width/height will be set to the width/height of the
+	new text. */
 	text_original_string = text_string;
 	text_height = 0; // scrolling requires text_height of entire list
 	var effects = new JTT_Text("", effects_default); // effects copied from default
@@ -240,6 +247,7 @@ function set_alignments(box_v, box_h, text_v, text_h) {
 	set_box_align_h(box_h);
 	set_text_align_v(text_v);
 	set_text_align_h(text_h);
+	return;
 }
 
 /// @desc Return color based on command text.
@@ -268,7 +276,7 @@ function tb_get_color(new_color) {
 	else if (new_color == "white") color_change = c_white;
 	else if (new_color == "yellow") color_change = c_yellow;
 	
-	// Here we will check for a valid rbg code, assuming a color has not yet been found.
+	// Here we will check for a valid rgb code, assuming a color has not yet been found.
 	if (color_change == undefined) {
 		var rgb_r = "";
 		var rgb_g = "";
@@ -464,9 +472,9 @@ function command_apply_effects(command_text, _effects) {
 }
 
 /// @desc Set new display values to next displayable chunk of text.
-// Note that for scrolling, the entire text is always displayable.
 /// @func next_page()
 function next_page() {
+	// Note that for scrolling, the entire text is always displayable.
 	if (ds_list_size(text) <= 0) {
 		show_error("Cannot go to next page, text not set!", true);
 	}
@@ -522,7 +530,7 @@ function next_page() {
 	}
 	
 	if (type_on_nextpage) {
-		set_typing_finished();
+		set_typing_page_finished();
 	} else {
 		set_typing_start();
 	}
@@ -542,10 +550,10 @@ function advance() {
 		next_page();
 	} else {
 		if (textbox_display_mode == 0) {
-			if (get_typing_finished()) {
+			if (get_typing_page_finished()) {
 				next_page();
 			} else {
-				set_typing_finished();
+				set_typing_page_finished();
 			}
 		} else {
 			if (get_scrolling_finished()) {
@@ -560,12 +568,15 @@ function advance() {
 /// @desc Return true if the whole text fits in the box.
 /// @func get_fits_onepage()
 function get_fits_onepage() {
-	return (text_height <= textbox_height);
+	if (row_i_start == 0 && row_i_end == (ds_list_size(text) - 1)) {
+		return true;
+	}
+	return false;
 }
 
-/// @desc Return true if typing complete.
-/// @func get_typing_finished()
-function get_typing_finished() {
+/// @desc Return true if typing of current page complete.
+/// @func get_typing_page_finished()
+function get_typing_page_finished() {
 	if (cursor_row < row_i_end) return false;
 	
 	if (cursor_row > row_i_end) {
@@ -577,9 +588,18 @@ function get_typing_finished() {
 	return true;
 }
 
+/// @desc Return true if typing of all pages is complete.
+/// @func get_typing_all_finished()
+function get_typing_all_finished() {
+	if (get_typing_page_finished() && row_i_end == ds_list_size(text) - 1) {
+		return true;
+	}
+	return false;
+}
+
 /// @desc Set typing cursor values to finished.
-/// @func set_typing_finished()
-function set_typing_finished() {
+/// @func set_typing_page_finished()
+function set_typing_page_finished() {
 	if (ds_list_size(text) <= 0) {
 		show_error("Cannot set typing finished, text not set!", true);
 	} else {
@@ -623,9 +643,9 @@ function update() {
 	textbox_delta_time();
 	
 	// typing effect
-	/* We dont' bother to check display_mode since for scrolling textboxes, 
+	/* We don't bother to check display_mode since for scrolling textboxes, 
 	the typing will automatically be set to finished. */
-	if ((row_i_start != undefined) && !get_typing_finished()) {
+	if ((row_i_start != undefined) && !get_typing_page_finished()) {
 		// run update logic until caught up
 		while (typing_time <= 0) {
 			typing_time += typing_time_default;
@@ -670,6 +690,7 @@ function update() {
 					if (cursor_row < row_i_end) {
 						cursor = 1;
 						cursor_row += 1;
+						
 						row_length = text_list_length(text[|cursor_row]);
 					} else {
 						cursor = row_length;
