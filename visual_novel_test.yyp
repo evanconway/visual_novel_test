@@ -1,5 +1,10 @@
 {
   "resources": [
+    {"id":{"name":"o_scene_intro","path":"objects/o_scene_intro/o_scene_intro.yy",},"order":0,},
+    {"id":{"name":"s_triangle_up","path":"sprites/s_triangle_up/s_triangle_up.yy",},"order":3,},
+    {"id":{"name":"s_square_up","path":"sprites/s_square_up/s_square_up.yy",},"order":2,},
+    {"id":{"name":"s_square","path":"sprites/s_square/s_square.yy",},"order":0,},
+    {"id":{"name":"s_triangle","path":"sprites/s_triangle/s_triangle.yy",},"order":1,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
   ],
   "Options": [
