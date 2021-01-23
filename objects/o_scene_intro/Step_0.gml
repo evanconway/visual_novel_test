@@ -30,7 +30,7 @@ if (step == n++) {
 	}
 } else if (step == n++) {
 	if (keyboard_check_pressed(vk_space)) {
-		textbox.set_text("Pick one of the 3 numbers:");
+		textbox.set_text("Press ENTER to choose one of the 3 numbers:");
 		character_triangle = s_triangle;
 		textbox.advance();
 		color = c_lime;
@@ -38,7 +38,7 @@ if (step == n++) {
 	}
 } else if (step == n++) {
 	if (textbox.get_typing_all_finished() || keyboard_check_pressed(vk_space)) {
-		textbox.set_text("Pick one of the 3 numbers:<n><yellow pulse>1<><n>2<n>3");
+		textbox.set_text("Press ENTER to choose one of the 3 numbers:<n><yellow pulse>1<><n>2<n>3");
 		textbox.advance();
 		textbox.set_typing_page_finished();
 		color = c_ltgray;
@@ -58,15 +58,31 @@ if (step == n++) {
 	
 	if (choice_change) {
 		if (choice == 0) {
-			textbox.set_text("Pick one of the 3 numbers:<n><yellow pulse>1<><n>2<n>3");
+			textbox.set_text("Press ENTER to choose one of the 3 numbers:<n><yellow pulse>1<><n>2<n>3");
 		}
 		if (choice == 1) {
-			textbox.set_text("Pick one of the 3 numbers:<n>1<n><yellow pulse>2<><n>3");
+			textbox.set_text("Press ENTER to choose one of the 3 numbers:<n>1<n><yellow pulse>2<><n>3");
 		}
 		if (choice == 2) {
-			textbox.set_text("Pick one of the 3 numbers:<n>1<n>2<n><yellow pulse>3<>");
+			textbox.set_text("Press ENTER to choose one of the 3 numbers:<n>1<n>2<n><yellow pulse>3<>");
 		}
 		textbox.advance();
 		textbox.set_typing_page_finished();
+	}
+	
+	if (keyboard_check_pressed(vk_enter)) {
+		var number = undefined;
+		if (choice == 0) number = 1;
+		if (choice == 1) number = 2;
+		if (choice == 2) number = 3;
+		textbox.set_text("You chose number " + string(number) + ". Amazing!");
+		textbox.advance();
+		step++;
+	}
+} else if (step == n++) {
+	if (keyboard_check_pressed(vk_space)) {
+		textbox.set_text("Pres R to restart.");
+		textbox.advance();
+		step++;
 	}
 }
