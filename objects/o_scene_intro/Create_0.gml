@@ -17,10 +17,13 @@ color = c_white;
 character_square = s_square;
 character_triangle = s_triangle;
 
+global.JTT_DEFAULT_FONT = f_test;
 global.JTT_DEFAULT_TYPING_CHIRP = snd_textbox_default;
-global.JTT_DEBUGGING = true;
-textbox = jtt_create_box_typing_gui(window_w / 2, window_h, window_w, 300);
+global.JTT_DEBUGGING = false;
+textbox = jtt_create_box_typing_gui(window_w / 2, window_h, window_w / 1.5, 150);
 textbox.set_alignments(fa_bottom, fa_center, fa_center, fa_center);
 textbox.set_text("Press Space to begin!");
 textbox.advance();
 textbox.advance(); // start typed
+
+choice = 0;

@@ -30,9 +30,43 @@ if (step == n++) {
 	}
 } else if (step == n++) {
 	if (keyboard_check_pressed(vk_space)) {
-		textbox.set_text("That's the end of our text.");
+		textbox.set_text("Pick one of the 3 numbers:");
 		character_triangle = s_triangle;
 		textbox.advance();
 		color = c_lime;
+		step++
+	}
+} else if (step == n++) {
+	if (textbox.get_typing_all_finished() || keyboard_check_pressed(vk_space)) {
+		textbox.set_text("Pick one of the 3 numbers:<n><yellow pulse>1<><n>2<n>3");
+		textbox.advance();
+		textbox.set_typing_page_finished();
+		color = c_ltgray;
+		choice = 0;
+		step++;
+	}
+} else if (step == n++) {
+	var choice_change = false;
+	if (keyboard_check_pressed(vk_up) && choice > 0) {
+		choice--;
+		choice_change = true;
+	}
+	if (keyboard_check_pressed(vk_down) && choice < 2) {
+		choice++;
+		choice_change = true;
+	}
+	
+	if (choice_change) {
+		if (choice == 0) {
+			textbox.set_text("Pick one of the 3 numbers:<n><yellow pulse>1<><n>2<n>3");
+		}
+		if (choice == 1) {
+			textbox.set_text("Pick one of the 3 numbers:<n>1<n><yellow pulse>2<><n>3");
+		}
+		if (choice == 2) {
+			textbox.set_text("Pick one of the 3 numbers:<n>1<n>2<n><yellow pulse>3<>");
+		}
+		textbox.advance();
+		textbox.set_typing_page_finished();
 	}
 }
