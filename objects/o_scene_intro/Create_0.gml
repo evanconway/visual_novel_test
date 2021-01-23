@@ -13,7 +13,6 @@ camera_set_view_size(view_camera[0], window_w, window_h);
 display_set_gui_size(window_w, window_h);
 
 step = 0;
-color = c_white;
 character_square = s_square;
 character_triangle = s_triangle;
 
@@ -27,3 +26,4 @@ textbox.advance();
 textbox.advance(); // start typed
 
 choice = 0;
+path = 0;

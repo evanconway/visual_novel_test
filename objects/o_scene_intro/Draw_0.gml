@@ -1,12 +1,6 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-/*
-draw_set_color(color);
-draw_text(30, 30, "Square: " + string(character_square));
-draw_text(30, 50, "Triangle: " + string(character_triangle));
-*/
-
 var stretch = 400;
 var y_pos = 0;
 
