@@ -1,13 +1,13 @@
 /// @description Insert description here
 // You can write your code in this editor
 
-var _mouse = [display_mouse_get_x(), display_mouse_get_y()];
+mouse = [device_mouse_x_to_gui(0), device_mouse_y_to_gui(0)];
 
 if (keyboard_check_pressed(vk_anykey)) {
 	mouse_using = false;
 }
 
-var _mouse_moved = (_mouse[0] != mouse_prev[0] || _mouse[1] != mouse_prev[1]);
+var _mouse_moved = (mouse[0] != mouse_prev[0] || mouse[1] != mouse_prev[1]);
 
 if (_mouse_moved) {
 	mouse_using = true;
@@ -49,5 +49,5 @@ if (mouse_using) {
 	}
 }
 
-mouse_prev = [display_mouse_get_x(), display_mouse_get_y()];
+mouse_prev = mouse;
 mouse_using_prev = mouse_using;

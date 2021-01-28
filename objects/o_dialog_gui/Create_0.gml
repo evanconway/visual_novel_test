@@ -1,3 +1,9 @@
+view_enabled = true;
+view_visible[0] = true;
+window_set_size(1280, 720);
+display_set_gui_size(1280, 720);
+surface_resize(application_surface, 1280, 720);
+
 var _x = display_get_gui_width() / 2;
 var _y = display_get_gui_height() - display_get_gui_height() / 16;
 var _width = display_get_gui_width() / 2;
@@ -12,7 +18,8 @@ choices = [];
 choice_selected = -1; // for informing the system something was chosen
 choice_highlighted = -1; // for selecting choices with kb/gp
 
-mouse_prev = [display_mouse_get_x(), display_mouse_get_y()];
+mouse = [device_mouse_x_to_gui(0), device_mouse_y_to_gui(0)];
+mouse_prev = mouse;
 
 mouse_using = false;
 mouse_using_prev = false;

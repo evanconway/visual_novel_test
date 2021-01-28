@@ -9,8 +9,8 @@ highlight = false;
 
 /// @func get_mouse_hover()
 get_mouse_hover = function() {
-	var _x = window_mouse_get_x();
-	var _y = window_mouse_get_y();
+	var _x = device_mouse_x_to_gui(0);
+	var _y = device_mouse_y_to_gui(0);
 
 	var _hover_x = (_x >= x && _x <= x + label.textbox_width);
 	var _hover_y = (_y >= y && _y <= y + label.textbox_height);
