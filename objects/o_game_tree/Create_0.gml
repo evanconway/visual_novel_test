@@ -17,6 +17,10 @@ add_step = function(_data) {
 	}
 	array_push(tree, _node);
 	
+	/*
+	The next branch 
+	*/
+	
 	for (var i = 1; i < argument_count; i++) {
 		/*
 		If a step contains multiple branches, the functions that create those branches will
@@ -26,8 +30,11 @@ add_step = function(_data) {
 		in the node. This ensures that the index will be correct for the next branch 
 		function. 
 		*/
-		_node.branches[i - 1] = array_length(tree);
-		//argument[i]();
+		array_push(_node.branches, array_length(tree));
+		if (is_method(argument[i])) {
+			show_debug_message("Branch is method!");
+			method(undefined, argument[i])();
+		}
 	}
 }
 
