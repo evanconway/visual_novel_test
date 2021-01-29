@@ -46,13 +46,14 @@ function game_tree() constructor{
 		var step = [branch, branch_depth, _data, []]
 		var step_prev = array_length(tree) > 0 ? tree[array_length(tree) - 1] : undefined;
 		array_push(tree, step);
-		if (step_prev == undefined) return; // end function if first step
+		if (step_prev == undefined) {
+			// End function if first step. We have to set new branch flag to false here because we never make it to the normal setter at the bottom.
+			create_new_branch = false;
+			return;
+		}
 		var curr_step_id = array_length(tree) - 1;
 		
-		// execute branch functions
-		for (var i = 1; i < argument_count; i++) {
-			method(undefined, argument[i]);
-		}
+		// After adding the newest step. The targets of the previous step(s) must be determined.
 		
 		// If the previous step is in the same branch as the current, add current step index as target of previous step.
 		if (step_prev[GAME_TREE.BRANCH] == branch) {
@@ -62,7 +63,31 @@ function game_tree() constructor{
 		// If the current step is the beginning of a branch, add the current step index as a target for the last step in the next highest depth. 
 		if (create_new_branch) {
 			// find last step in higher depth (remember lower number is higher depth)
+			var last_high_depth = curr_step_id;
+			while (tree[last_high_depth][GAME_TREE.DEPTH] != branch_depth - 1) last_high_depth--;
+			array_push(tree[last_high_depth][GAME_TREE.TARGETS], curr_step_id);
 		}
+		
+		// If the previous step's depth is one lower than current (and current is not a new branch), add current index as target for steps with empty target arrays between current, and last step in current depth.
+		if (step_prev[GAME_TREE.DEPTH] == branch_depth + 1 && !create_new_branch) {
+			// find last step with same depth as current
+			var i_backwards = curr_step_id - 1;
+			while (tree[i_backwards][GAME_TREE.DEPTH] != branch_depth) {
+				if (array_length(tree[i_backwards][GAME_TREE.TARGETS]) <= 0) {
+					array_push(tree[i_backwards][GAME_TREE.TARGETS], curr_step_id);
+				}
+				i_backwards--;
+			}
+		}
+		
+		// execute branch functions
+		var branch_depth_original = branch_depth;
+		branch_depth++;
+		for (var i = 1; i < argument_count; i++) {
+			create_new_branch = true;
+			method(undefined, argument[i])();
+		}
+		branch_depth = branch_depth_original;
 		
 		// always reset create new branch.
 		create_new_branch = false

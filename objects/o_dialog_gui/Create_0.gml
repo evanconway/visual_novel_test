@@ -44,15 +44,15 @@ dialog_set_choices = function(_c) {
 dialog_set_text("The quick brown fox jumps over the lazy dog.");
 dialog_set_choices(["yes", "no", "maybe"]);
 
-dialog_tree = instance_create_depth(0, 0, 0, o_game_tree);
+dialog_tree = new game_tree();
 with (dialog_tree) {
-	add_step("first step");
+	add("first step");
 	var branch1 = function() {
-		add_step("you said yes");
+		add("you said yes");
 	}
 	var branch2 = function() {
-		add_step("you said no");
+		add("you said no");
 	}
-	add_step("question", branch1, branch2);
-	add_step("end of tree");
+	add("question", branch1, branch2);
+	add("end of tree");
 }
