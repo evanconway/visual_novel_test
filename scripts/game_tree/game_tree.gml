@@ -19,8 +19,9 @@ function game_tree() constructor{
 	[branch, branch_depth, data, targets]
 	*/
 	tree = [];
+	state = 0;
 	
-	branch = -1; // integer id of branch of each step
+	branch = -1; // integer id of branch of each step, for creation only
 	
 	/*
 	In our design, "depth" is not traditional tree depth. Instead we think of the first 
@@ -28,8 +29,8 @@ function game_tree() constructor{
 	is considered to be one depth lower. Think of depth as how far a branch has deviated
 	from the original branch. 
 	*/
-	branch_depth = 0; // depth of each step
-	create_new_branch = true; // flag for creating new branch
+	branch_depth = 0; // depth of each step, creation only
+	create_new_branch = true; // flag for creating new branch, creation only
 	
 	/// @func add(data, *branches...)
 	add = function(_data) {
@@ -100,5 +101,20 @@ function game_tree() constructor{
 		
 		// always reset create new branch.
 		create_new_branch = false
+	}
+	
+	/// @desc Set state to next target. 0 assumed if none given.
+	/// @func tree_advance(*target)
+	tree_advance = function() {
+		// do not advance if at end of tree
+		if (array_length(tree[state][GAME_TREE.TARGETS]) <= 0) return;
+		var target = argument_count >= 1 ? argument[0] : 0;
+		state = tree[state][GAME_TREE.TARGETS][target];
+	}
+	
+	/// @desc Return data at trees current state.
+	/// @func get_data()
+	get_data = function() {
+		return tree[state][GAME_TREE.DATA];
 	}
 }
