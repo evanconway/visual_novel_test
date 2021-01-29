@@ -26,6 +26,7 @@ mouse_using_prev = false;
 
 dialog_tree = new game_tree();
 
+// this function MUST be called after populating the tree to setup the dialog correctly
 /// @desc Populate gui with data from current tree state
 dialog_set_data = function() {
 	var data = dialog_tree.tree_get_data();
@@ -77,37 +78,6 @@ dialog_set_choices = function(_c) {
 }
 
 /*
-0: A [1]
-1: B [2]
-2: C [3, 16]
-
-	3: D [4]
-	4: E [5]
-	5: F [6, 9]
-	
-		6: G [7, 8]
-		
-			7: H [15]
-			
-			8: I [15]
-		
-		9: J [10]
-		10: K [11, 13]
-		
-			11: L [12]
-			12: M [14]
-			
-			13: N [14]
-		14: O [15]
-	15: P [19]
-		
-	16: Q [17]
-	17: R [18]
-	18: S [19]
-19: T [20]
-20: U
-*/
-
 with (dialog_tree) {
 	add("A");
 	add("B");
@@ -138,6 +108,29 @@ with (dialog_tree) {
 	});
 	add("T");
 	add("U");
+}
+*/
+
+with (dialog_tree) {
+	add("Greetings player!");
+	add("I am your friendly example dialog tree.");
+	add(["What would you like to know?", "How do you work?", "Who made you?"], function() {
+		add("Why, it's quite simple. You add dialog to me with the \"add\" function.");
+		add("Different branches can be created by making functions right in the tree!");
+		add(["Isn't that neat?", "Don't you have a gui?", "I guess..."], function() {
+			add("...");
+			add(["ISN'T THAT NEAT???", "yes..."], function() {
+				add("Of course it is!");
+			});
+		}, function() {
+			add("If you're not impressed, you're welcome to go learn some OTHER system :D");
+			add("And I'll take my intuitive self to some OTHER developer who will APPRECIATE me.");
+		})
+	}, function() {
+		add("0rd1n4ry did. I was created in the hopes of making a beautiful visual novel.");
+		add("Thank you for asking!");
+	});
+	add("Good day to you player!");
 }
 
 dialog_set_data();
