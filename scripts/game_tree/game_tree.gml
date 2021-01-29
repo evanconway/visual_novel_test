@@ -81,13 +81,15 @@ function game_tree() constructor{
 		}
 		
 		// execute branch functions
-		var branch_depth_original = branch_depth;
-		branch_depth++;
+		var branch_original = branch;
+		var branch_original_depth = branch_depth;
 		for (var i = 1; i < argument_count; i++) {
+			branch_depth = branch_original_depth + 1;
 			create_new_branch = true;
 			method(undefined, argument[i])();
 		}
-		branch_depth = branch_depth_original;
+		branch = branch_original;
+		branch_depth = branch_original_depth;
 		
 		// always reset create new branch.
 		create_new_branch = false
