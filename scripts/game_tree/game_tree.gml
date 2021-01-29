@@ -43,8 +43,17 @@ function game_tree() constructor{
 	
 		if (create_new_branch) branch++;
 		
-		var step = [branch, branch_depth, _data, []]
+		var step = [branch, branch_depth, _data, []]; // the branch id could be WRONG if new branch wasn't created
 		var step_prev = array_length(tree) > 0 ? tree[array_length(tree) - 1] : undefined;
+		
+		// correct step branch id
+		if (step_prev != undefined && !create_new_branch) {
+			// find last step with same depth as current step
+			var last_same_depth = array_length(tree) - 1;
+			while (tree[last_same_depth][GAME_TREE.DEPTH] != step[GAME_TREE.DEPTH]) last_same_depth--;
+			step[GAME_TREE.BRANCH] = tree[last_same_depth][GAME_TREE.BRANCH];
+		}
+		
 		array_push(tree, step);
 		if (step_prev == undefined) {
 			// End function if first step. We have to set new branch flag to false here because we never make it to the normal setter at the bottom.
@@ -56,7 +65,7 @@ function game_tree() constructor{
 		// After adding the newest step. The targets of the previous step(s) must be determined.
 		
 		// If the previous step is in the same branch as the current, add current step index as target of previous step.
-		if (step_prev[GAME_TREE.BRANCH] == branch) {
+		if (step_prev[GAME_TREE.BRANCH] == step[GAME_TREE.BRANCH]) {
 			array_push(step_prev[GAME_TREE.TARGETS], curr_step_id);
 		}
 		
@@ -81,14 +90,12 @@ function game_tree() constructor{
 		}
 		
 		// execute branch functions
-		var branch_original = branch;
 		var branch_original_depth = branch_depth;
 		for (var i = 1; i < argument_count; i++) {
 			branch_depth = branch_original_depth + 1;
 			create_new_branch = true;
 			method(undefined, argument[i])();
 		}
-		branch = branch_original;
 		branch_depth = branch_original_depth;
 		
 		// always reset create new branch.

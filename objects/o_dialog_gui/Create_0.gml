@@ -44,15 +44,66 @@ dialog_set_choices = function(_c) {
 dialog_set_text("The quick brown fox jumps over the lazy dog.");
 dialog_set_choices(["yes", "no", "maybe"]);
 
+/*
+0: A [1]
+1: B [2]
+2: C [3, 16]
+
+	3: D [4]
+	4: E [5]
+	5: F [6, 9]
+	
+		6: G [7, 8]
+		
+			7: H [15]
+			
+			8: I [15]
+		
+		9: J [10]
+		10: K [11, 13]
+		
+			11: L [12]
+			12: M [14]
+			
+			13: N [14]
+		14: O [15]
+	15: P [19]
+		
+	16: Q [17]
+	17: R [18]
+	18: S [19]
+19: T [20]
+20: U
+*/
 dialog_tree = new game_tree();
 with (dialog_tree) {
-	add("first step");
-	var branch1 = function() {
-		add("you said yes");
-	}
-	var branch2 = function() {
-		add("you said no");
-	}
-	add("question", branch1, branch2);
-	add("end of tree");
+	add("A");
+	add("B");
+	add("C", function() {
+		add("D");
+		add("E");
+		add("F", function() {
+			add("G", function() {
+				add("H");
+			}, function() {
+				add("I");
+			});
+		}, function() {
+			add("J");
+			add("K", function() {
+				add("L");
+				add("M");
+			}, function() {
+				add("N");
+			});
+			add("O");
+		});
+		add("P");
+	}, function() {
+		add("Q");
+		add("R");
+		add("S");
+	});
+	add("T");
+	add("U");
 }
