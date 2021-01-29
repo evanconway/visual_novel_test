@@ -114,15 +114,15 @@ with (dialog_tree) {
 	add(["C", "D", "Q"], function() {
 		add("D");
 		add("E");
-		add("F", function() {
-			add("G", function() {
+		add(["F", "G", "J"], function() {
+			add(["G", "H", "I"], function() {
 				add("H");
 			}, function() {
 				add("I");
 			});
 		}, function() {
 			add("J");
-			add("K", function() {
+			add(["K", "L", "N"], function() {
 				add("L");
 				add("M");
 			}, function() {
