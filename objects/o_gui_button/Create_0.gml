@@ -6,9 +6,12 @@ function from the dialog gui script.
 text = undefined;
 label = undefined;
 highlight = false;
+active = true; // determines if button is visible and logic executes.
 
 /// @func get_mouse_hover()
 get_mouse_hover = function() {
+	if (!active) return false; // always false if inactive
+	
 	var _x = device_mouse_x_to_gui(0);
 	var _y = device_mouse_y_to_gui(0);
 
@@ -32,4 +35,9 @@ set_highlight = function(_h) {
 			label.advance();
 		}
 	}
+}
+
+set_active = function(_b) {
+	active = _b;
+	label.visible = _b;
 }

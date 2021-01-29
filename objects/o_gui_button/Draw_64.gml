@@ -1,6 +1,8 @@
 /// @description Insert description here
 // You can write your code in this editor
 
+if (!active) exit;
+
 var _original_color = draw_get_color();
 var _original_alpha = draw_get_alpha();
 

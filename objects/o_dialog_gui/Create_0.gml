@@ -9,7 +9,7 @@ var _y = display_get_gui_height() - display_get_gui_height() / 16;
 var _width = display_get_gui_width() / 2;
 var _height = display_get_gui_height() / 3;
 
-global.JTT_DEBUGGING = true;
+global.JTT_DEBUGGING = false;
 global.JTT_DEFAULT_TYPING_CHIRP = snd_textbox_default;
 textbox = jtt_create_box_typing_gui(_x, _y, _width, _height);
 textbox.set_alignments(fa_bottom, fa_center, fa_top, fa_left);
@@ -24,25 +24,57 @@ mouse_prev = mouse;
 mouse_using = false;
 mouse_using_prev = false;
 
+dialog_tree = new game_tree();
+
+/// @desc Populate gui with data from current tree state
+dialog_set_data = function() {
+	var data = dialog_tree.tree_get_data();
+	var _choices = [];
+	
+	/*
+	To make life easier, data for steps in dialog can be one of two things: A string, or an
+	array of strings. If the data is just a string, there will be no choices, and the
+	textbox will be populated with the given string. If data is an array of strings. The 
+	textbox will be populated with string at index 0, and the remaining entries will be
+	choices for the textbox.
+	*/
+	
+	if (is_string(data)) {
+		dialog_set_text(data);
+	}
+	
+	if (is_array(data)) {
+		dialog_set_text(data[0]);
+		// branch choices are all remaining options
+		for (var i = 1; i < array_length(data); i++) {
+			array_push(_choices, data[i]);
+		}
+	}
+	
+	dialog_set_choices(_choices);
+}
+
+/// @func dialog_set_text(new_text)
 dialog_set_text = function(new_text) {
 	textbox.set_text(new_text);
 	textbox.advance();
 }
 
-/// @func set_choices(choices_array)
+/// @func dialog_set_choices(choices_array)
 dialog_set_choices = function(_c) {
+	// clear old buttons
+	for (var i = 0; i < array_length(choices); i++) {
+		instance_destroy(choices[i]);
+	}
 	choices = array_create(array_length(_c));
 	var button_x = 100;
 	var button_y = 100
 	for (var i = 0; i < array_length(_c); i++) {
 		choices[i] = create_button(button_x, button_y, _c[i]);
+		choices[i].set_active(false);
 		button_y += (choices[i].label.textbox_height + 1);
-		
 	}
 }
-
-dialog_set_text("The quick brown fox jumps over the lazy dog.");
-dialog_set_choices(["yes", "no", "maybe"]);
 
 /*
 0: A [1]
@@ -75,11 +107,11 @@ dialog_set_choices(["yes", "no", "maybe"]);
 19: T [20]
 20: U
 */
-dialog_tree = new game_tree();
+
 with (dialog_tree) {
 	add("A");
 	add("B");
-	add("C", function() {
+	add(["C", "D", "Q"], function() {
 		add("D");
 		add("E");
 		add("F", function() {
@@ -108,3 +140,4 @@ with (dialog_tree) {
 	add("U");
 }
 
+dialog_set_data();
