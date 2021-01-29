@@ -11,7 +11,6 @@
     {"id":{"name":"o_jtt_textbox","path":"objects/o_jtt_textbox/o_jtt_textbox.yy",},"order":3,},
     {"id":{"name":"s_triangle_up","path":"sprites/s_triangle_up/s_triangle_up.yy",},"order":3,},
     {"id":{"name":"s_square_up","path":"sprites/s_square_up/s_square_up.yy",},"order":2,},
-    {"id":{"name":"o_game_tree","path":"objects/o_game_tree/o_game_tree.yy",},"order":3,},
     {"id":{"name":"dialog_gui_functions","path":"scripts/dialog_gui_functions/dialog_gui_functions.yy",},"order":0,},
     {"id":{"name":"o_gui_button","path":"objects/o_gui_button/o_gui_button.yy",},"order":2,},
     {"id":{"name":"s_square","path":"sprites/s_square/s_square.yy",},"order":0,},
